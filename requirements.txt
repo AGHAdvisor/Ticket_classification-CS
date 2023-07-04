@@ -1,10 +1,5 @@
-cohere==4.11.2
-GitPython==3.1.31
 nltk==3.8.1
-numpy @ file:///D:/bld/numpy_1651020773031/work
 openai==0.27.8
-openpyxl @ file:///home/conda/feedstock_root/build_artifacts/openpyxl_1632332968451/work
 pandas==2.0.2
-scikit-learn @ file:///C:/b/abs_38k7ridbgr/croot/scikit-learn_1684954723009/work
 sklearn-contrib-lightning @ file:///D:/bld/sklearn-contrib-lightning_1636817236917/work
 streamlit==1.23.1
