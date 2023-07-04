@@ -1,5 +1,4 @@
 nltk==3.8.1
 openai==0.27.8
 pandas==2.0.2
-sklearn-contrib-lightning @ file:///D:/bld/sklearn-contrib-lightning_1636817236917/work
 streamlit==1.23.1
