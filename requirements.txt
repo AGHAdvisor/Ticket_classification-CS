@@ -1,2 +1,6 @@
+nltk==3.8.1
+openpyxl
+pandas==2.0.2
+scikit-learn @ file:///C:/b/abs_38k7ridbgr/croot/scikit-learn_1684954723009/work
+scipy==1.10.1
 sklearn-contrib-lightning @ file:///D:/bld/sklearn-contrib-lightning_1636817236917/work
-streamlit==1.23.1
