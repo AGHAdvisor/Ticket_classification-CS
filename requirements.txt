@@ -1,4 +1,6 @@
-nltk==3.8.1
-pandas==2.0.2
-scipy==1.10.1
-sklearn-contrib-lightning @ file:///D:/bld/sklearn-contrib-lightning_1636817236917/work
+scikit-learn==0.22.1
+matplotlib==3.2.2
+numpy==1.18.1
+pandas==1.0.5
+streamlit==0.62.0
+Werkzeug==1.0.1
