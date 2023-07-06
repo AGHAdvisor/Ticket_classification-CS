@@ -100,10 +100,18 @@ def main():
         # Predict the classification on the test dataset
         predictions = classifier.predict(test_features)
 
-        # Extract keywords from the manual classification column and create a new column
-        test_df['Classified Class'] = test_df['Junk'].apply(
+        # Check if the message column exists
+        if "Junk" in test_df.columns:
+            test_df['Classified Class'] = test_df['Junk'].apply(
             lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
         )
+        elif "Ticket Subject" in test_df.columns:
+            test_df['Classified Class'] = test_df['Ticket Subject'].apply(
+            lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
+        )
+        else:
+            st.error("Error: Junk or Ticket subject column not found in the uploaded file.")
+            return
 
         # Map "no comment" to "To Check" in the predicted classifications
         predictions = np.where(test_messages.str.lower() == '(no comment)', 'To Check', predictions)
@@ -120,4 +128,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
