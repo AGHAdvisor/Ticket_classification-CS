@@ -3,3 +3,14 @@ pandas==1.0.5
 cython==0.29.3
 scipy==0.17.0
 scikit-learn==0.22.1
+nltk==3.8.1
+numpy @ file:///D:/bld/numpy_1651020773031/work
+openpyxl @ file:///home/conda/feedstock_root/build_artifacts/openpyxl_1632332968451/work
+pandas==2.0.2
+scikit-learn @ file:///C:/b/abs_38k7ridbgr/croot/scikit-learn_1684954723009/work
+scipy==1.10.1
+sklearn==0.0.post5
+sklearn-contrib-lightning @ file:///D:/bld/sklearn-contrib-lightning_1636817236917/work
+streamlit==1.23.1
+tqdm==4.65.0
+urllib3==2.0.3
