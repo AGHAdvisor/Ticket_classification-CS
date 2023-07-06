@@ -1,4 +1,4 @@
 scikit-learn==0.22.1
 numpy==1.18.1
 pandas==1.0.5
-cython==0.28.5
+cython==0.29.3
