@@ -51,7 +51,8 @@ def clean_text(text):
 train_df = pd.read_excel('df2.xlsx')  # Update with your file path
 
 # Extract keywords from the manual classification column and create a new column
-keywords = ['Junk']
+keywords = ['Collaboration', 'Complaint', 'Compliment', 'Feedback', 'Suggestion',
+            'Query', 'Junk', 'Non Relevant', 'Universal', 'Follow Up']
 train_df['new_classification'] = train_df['Ticket form'].apply(
     lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
 )
