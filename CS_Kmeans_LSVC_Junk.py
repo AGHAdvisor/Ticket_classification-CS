@@ -95,7 +95,7 @@ for i, classifier in enumerate(classifiers):
 def classify_message(message):
     cleaned_message = clean_text(message)
     # Check if the cleaned message contains 8 or more numbers
-    if len(re.findall(r'\d', cleaned_message)) >= 8:
+    if re.search(r'\b\d{19}\b', cleaned_message):
         return "Not Classified", 0.0
     message_features = vectorizer.transform([cleaned_message])
     cluster = kmeans.predict(message_features)[0]
