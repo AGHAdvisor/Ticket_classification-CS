@@ -147,18 +147,17 @@ def main():
         predictions = np.where(test_messages.str.lower() == '(no comment)', 'To Check', predictions)
 
         # Check if the message column exists
-        keywords1 = ['Junk']
         if "Junk" in test_df.columns:
             test_df['Classified Class'] = test_df['Junk'].apply(
-            lambda x: next((kw for kw in keywords1 if kw.lower() in x.lower()), 'Other')
+            lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
         )
         elif "Ticket subject" in test_df.columns:
             test_df['Classified Class'] = test_df['Ticket subject'].apply(
-            lambda x: next((kw for kw in keywords1 if kw.lower() in x.lower()), 'Other')
+            lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
         )
         elif "Ticket form" in test_df.columns:
             test_df['Classified Class'] = test_df['Ticket form'].apply(
-            lambda x: next((kw for kw in keywords1 if kw.lower() in x.lower()), 'Other')
+            lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
         )
         else:
             st.error("Error: Junk or Ticket subject column not found in the uploaded file.")
