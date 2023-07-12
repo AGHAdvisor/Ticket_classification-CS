@@ -69,7 +69,7 @@ vectorizer = TfidfVectorizer()
 train_features = vectorizer.fit_transform(train_features)
 
 # Perform clustering to identify patterns
-num_clusters = 5
+num_clusters = 10
 kmeans = KMeans(n_clusters=num_clusters, random_state=42)
 train_clusters = kmeans.fit_predict(train_features)
 
@@ -121,9 +121,6 @@ def main():
         if 'Ticket form' not in test_df.columns:
             st.error("Error: 'Ticket form' column not found in the uploaded file.")
             return
-
-        # Filter the rows where 'Ticket form' contains 'Junk' keyword
-        test_df = test_df[test_df['Ticket form'].str.lower().str.contains('junk')]
 
         # Check if the message column exists
         if "Message" in test_df.columns:
