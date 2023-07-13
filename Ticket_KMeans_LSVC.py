@@ -69,7 +69,7 @@ vectorizer = TfidfVectorizer()
 train_features = vectorizer.fit_transform(train_features)
 
 # Perform clustering to identify patterns
-num_clusters = 5
+num_clusters = 10
 kmeans = KMeans(n_clusters=num_clusters, random_state=42)
 train_clusters = kmeans.fit_predict(train_features)
 
@@ -94,13 +94,16 @@ for i, classifier in enumerate(classifiers):
 # Define a function to classify new messages
 def classify_message(message):
     cleaned_message = clean_text(message)
+    # Check if the cleaned message contains 8 or more numbers
+    if re.search(r'\b\d{19}\b', cleaned_message):
+        return "Not Classified", 0.0
     message_features = vectorizer.transform([cleaned_message])
     cluster = kmeans.predict(message_features)[0]
     classifier = classifiers[cluster]
     prediction = classifier.predict(message_features)[0]
     confidence_score = np.max(classifier.decision_function(message_features))
     return prediction, confidence_score
-
+    
 # Create the Streamlit app
 def main():
     st.set_page_config(
@@ -116,6 +119,11 @@ def main():
     uploaded_file = st.file_uploader("Upload a file", type="xlsx")
     if uploaded_file is not None:
         test_df = pd.read_excel(uploaded_file)
+
+        # Check if the 'Ticket form' column exists
+        if 'Ticket form' not in test_df.columns:
+            st.error("Error: 'Ticket form' column not found in the uploaded file.")
+            return
 
         # Check if the message column exists
         if "Message" in test_df.columns:
@@ -135,6 +143,9 @@ def main():
         # Predict the classification and confidence score on the test dataset
         predictions, confidence_scores = zip(*[classify_message(msg) for msg in test_messages])
 
+        # Map "no comment" to "To Check" in the predicted classifications
+        predictions = np.where(test_messages.str.lower() == '(no comment)', 'To Check', predictions)
+
         # Check if the message column exists
         if "Junk" in test_df.columns:
             test_df['Classified Class'] = test_df['Junk'].apply(
@@ -152,12 +163,15 @@ def main():
             st.error("Error: Junk or Ticket subject column not found in the uploaded file.")
             return
 
-        # Map "no comment" to "To Check" in the predicted classifications
-        predictions = np.where(test_messages.str.lower() == '(no comment)', 'To Check', predictions)
-
         # Add the predictions and confidence scores to the test dataframe
         test_df['predicted_classification'] = predictions
         test_df['confidence_score'] = confidence_scores
+
+        # Create a new column indicating whether the predictions match the "Classified Class" column
+        test_df['prediction_match'] = np.where(test_df['predicted_classification'] == test_df['Classified Class'], 1, 0)
+
+        # Sort the classified data by the predicted classifications in alphabetical order
+        test_df = test_df.sort_values('predicted_classification')
 
         # Print the classification report for evaluation
         st.subheader("Classification Report:")
