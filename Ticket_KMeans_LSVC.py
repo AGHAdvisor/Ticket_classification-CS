@@ -10,7 +10,7 @@ import nltk
 import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
-import base64 as b64
+import base64
 import openpyxl
 
 nltk.download('punkt')
@@ -183,6 +183,8 @@ def main():
 
         # Download the classified data as a CSV file
         csv = test_df.to_csv(index=False)
+        # Encode CSV data as Base64
+        b64 = base64.b64encode(csv.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="classified_data.csv">Download Classified Data</a>'
         st.markdown(href, unsafe_allow_html=True)
 
