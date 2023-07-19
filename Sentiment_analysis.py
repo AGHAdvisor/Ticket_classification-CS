@@ -4,9 +4,11 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
+
 nltk.download('vader_lexicon')
 nltk.download('stopwords')
 nltk.download('punkt')
+
 import base64
 
 def preprocess_text(text):
@@ -38,11 +40,14 @@ def main():
             # Read the uploaded file
             df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('csv') else pd.read_excel(uploaded_file)
 
-            # Convert 'Message' column to string
-            df['Message'] = df['Message'].astype(str)
+            # Define the main column name
+            main_column = 'Message' if 'Message' in df.columns else 'Brief Description of Feedback'
+
+            # Convert the main column to string
+            df[main_column] = df[main_column].astype(str)
 
             # Clean the text
-            df['cleaned_text'] = df['Message'].apply(preprocess_text)
+            df['cleaned_text'] = df[main_column].apply(preprocess_text)
 
             # Create a SentimentIntensityAnalyzer object
             sia = SentimentIntensityAnalyzer()
@@ -53,7 +58,7 @@ def main():
             positive_messages = df[df['Positive Sentiment']]
 
             # Display positive messages in a DataFrame
-            positive_df = positive_messages[['Message', 'Positive Sentiment']]
+            positive_df = positive_messages[[main_column, 'Positive Sentiment']]
 
             # Download classified dataset as CSV
             csv = positive_df.to_csv(index=False)
