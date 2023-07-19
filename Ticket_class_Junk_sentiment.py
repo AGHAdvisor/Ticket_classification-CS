@@ -157,11 +157,11 @@ def main():
         # Check if the 'Brief Description of Feedback' or 'Message' column exists
         if 'Brief Description of Feedback' in test_df.columns:
             test_df['Classified Class'] = test_df['Brief Description of Feedback'].apply(
-                lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
+                lambda x: next((kw for kw in keywords if isinstance(x, str) and kw.lower() in x.lower()), 'Other')
             )
         elif 'Message' in test_df.columns:
             test_df['Classified Class'] = test_df['Message'].apply(
-                lambda x: next((kw for kw in keywords if kw.lower() in x.lower()), 'Other')
+                lambda x: next((kw for kw in keywords if isinstance(x, str) and kw.lower() in x.lower()), 'Other')
             )
         else:
             st.error("Error: 'Brief Description of Feedback' or 'Message' column not found in the uploaded file.")
@@ -170,6 +170,12 @@ def main():
         # Add the predictions and confidence scores to the test dataframe
         test_df['predicted_classification'] = predictions
         test_df['confidence_score'] = confidence_scores
+
+        # Sentiment analysis using SentimentIntensityAnalyzer
+        sia = SentimentIntensityAnalyzer()
+        sentiment_scores = test_messages.fillna('').apply(lambda x: sia.polarity_scores(x) if isinstance(x, str) else {})
+        test_df['sentiment_label'] = sentiment_scores.apply(lambda x: 'Positive' if x and x['compound'] >= 0 else 'Negative')
+        test_df['sentiment_score'] = sentiment_scores.apply(lambda x: x['compound'] if x else 0.0)
 
         # Create a new column indicating whether the predictions match the "Classified Class" column
         test_df['prediction_match'] = np.where(test_df['predicted_classification'] == test_df['Classified Class'], 1, 0)
@@ -191,16 +197,6 @@ def main():
         b64 = base64.b64encode(csv.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64}" download="classified_data.csv">Download Classified Data</a>'
         st.markdown(href, unsafe_allow_html=True)
-
-        # Visualize the predicted classification distribution
-        #st.subheader("Predicted Classification Distribution")
-        #prediction_counts = test_df['predicted_classification'].value_counts()
-        #plt.figure(figsize=(10, 6))
-        #sns.barplot(x=prediction_counts.index, y=prediction_counts.values, palette='muted')
-        #plt.xlabel("Predicted Classification")
-        #plt.ylabel("Count")
-        #plt.xticks(rotation=45)
-        #st.pyplot(plt)
 
 if __name__ == '__main__':
     main()
