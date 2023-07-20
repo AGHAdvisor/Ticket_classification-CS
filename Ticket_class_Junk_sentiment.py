@@ -157,11 +157,11 @@ def main():
 
         # Check if the 'Brief Description of Feedback' or 'Message' column exists
         if 'Brief Description of Feedback' in test_df.columns:
-            test_df['Classified Class'] = test_df['Brief Description of Feedback'].apply(
+            test_df['Classified Class'] = test_df['Ticket form'].apply(
                 lambda x: next((kw for kw in keywords if isinstance(x, str) and kw.lower() in x.lower()), 'Other')
             )
         elif 'Message' in test_df.columns:
-            test_df['Classified Class'] = test_df['Message'].apply(
+            test_df['Classified Class'] = test_df['Ticket form'].apply(
                 lambda x: next((kw for kw in keywords if isinstance(x, str) and kw.lower() in x.lower()), 'Other')
             )
         else:
